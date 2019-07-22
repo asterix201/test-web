@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  phpfpm:
+    image: bitnami/php-fpm
+    ports:
+      - 9000:9000
+    volumes:
+      - ./app:/app
+    restart: always
+    networks:
+      net:
+        aliases: 
+          - phpfpm
+
+  nginx:
+    image: bitnami/nginx:latest
+    depends_on:
+      - phpfpm
+    ports:
+      - 8080:8080
+    volumes:
+      - ./app:/app
+      - ./mysite.conf:/opt/bitnami/nginx/conf/server_blocks/mysite.conf
+    restart: always
+    networks:
+      net:
+
+networks:
+  net:
